@@ -33,8 +33,9 @@ Then: `ssh -p 2222 admin@localhost`
 
 ### Security audit summary
 - 19 findings identified
-- **0 unmitigated CRITICAL** (CRIT-05: AES S-box cache timing → FIXED, switched to ChaCha20-Poly1305)
-- 2 OPEN HIGH, 3 OPEN MEDIUM
+- **0 unmitigated CRITICAL** (CRIT-05: AES S-box cache timing → FIXED)
+- **1 OPEN HIGH** (HIGH-07: binary reproducibility not verified)
+- **3 OPEN MEDIUM** (MED-03, MED-05, MED-06: TPM attestation, fuzzing)
 - Full details: `docs/PRODUCTION_SECURITY_AUDIT.md`
 
 ### Changes since v3.6
@@ -49,3 +50,5 @@ Then: `ssh -p 2222 admin@localhost`
 - **CRIT-05 FIXED**: Default vault cipher switched from AES-256-GCM-SIV to ChaCha20-Poly1305 (fully constant-time, no S-box lookup tables)
 - **Poly1305 FIXED**: Removed OOB read of m[16] in non-final block processing
 - **ChaCha20 decrypt FIXED**: State was being zeroed before decryption keystream generation (key/nonce/SIGMA cleared)
+- **HIGH-03 FIXED**: ML-KEM-768 NTT variable-time reduction replaced with constant-time barrett_reduce + sign fix across poly_ntt, poly_intt, base_mul
+- **MED-02 FIXED**: Minimum password length increased from 8 to 12 characters (pw_score thresholds now 12/16/20)
