@@ -1,6 +1,6 @@
-## Briggs OS v3.7 — Production Release
+## Briggs OS v3.7 — Production Release (updated)
 
-**Kernel SHA-256**: `2d5bbcfb5098c11697f62c3a6fda143d7071dbfe2544ab98bda3fa3d4ab024a0`
+**Kernel SHA-256**: `43a7f587b7f609b40ebba29946fc3875ae97b9c068f14a9d503b8388cfbc4a8a`
 
 ### What's included
 - **briggs.img** — Raw HDD image (2 MB, bootable)
@@ -9,7 +9,7 @@
 - **boot.bin / stage2.bin** — Boot chain (verified)
 - **CHECKSUMS.txt** — Build artifact checksums
 - **docs/PRODUCTION_USER_GUIDE.md** — Full deployment & operations manual
-- **docs/PRODUCTION_SECURITY_AUDIT.md** — NSA-style security audit (19 findings)
+- **docs/PRODUCTION_SECURITY_AUDIT.md** — NSA-style security audit (19 findings, 0 unmitigated CRITICAL)
 - **docs/TPM_INTEGRATION.md** — TPM 2.0 setup guide
 - **docs/SECURE_UPDATE.md** — Secure update system
 - **docs/DROPBEAR_PORT.md** — SSH port notes
@@ -20,7 +20,7 @@
 - **Ed25519** offline-signed boot verification
 - **Entropy policy**: fail-closed (RDRAND required — no boot without it)
 - **Hybrid key exchange**: X25519 + ML-KEM-768 (post-quantum secure)
-- **At-rest encryption**: AES-256-GCM-SIV with key commitment
+- **At-rest encryption**: ChaCha20-Poly1305 with key commitment (fully constant-time)
 - **TOTP / hardware token** 2FA (optional per user)
 
 ### Quick start (QEMU)
@@ -33,7 +33,7 @@ Then: `ssh -p 2222 admin@localhost`
 
 ### Security audit summary
 - 19 findings identified
-- 1 unmitigated CRITICAL (AES S-box cache timing — use ChaCha20-Poly1305 as workaround)
+- **0 unmitigated CRITICAL** (CRIT-05: AES S-box cache timing → FIXED, switched to ChaCha20-Poly1305)
 - 2 OPEN HIGH, 3 OPEN MEDIUM
 - Full details: `docs/PRODUCTION_SECURITY_AUDIT.md`
 
@@ -46,3 +46,6 @@ Then: `ssh -p 2222 admin@localhost`
 - Multi-session cooperative vault_picker
 - Session cleanup on RST/FIN
 - 60/60 beta tests passing, 5/5 repro cycles
+- **CRIT-05 FIXED**: Default vault cipher switched from AES-256-GCM-SIV to ChaCha20-Poly1305 (fully constant-time, no S-box lookup tables)
+- **Poly1305 FIXED**: Removed OOB read of m[16] in non-final block processing
+- **ChaCha20 decrypt FIXED**: State was being zeroed before decryption keystream generation (key/nonce/SIGMA cleared)

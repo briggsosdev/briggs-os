@@ -1,95 +1,96 @@
-<div align="center">
+# BRIGGS OS
 
-# 🛡️ Briggs OS
+Briggs OS is a BIOS-bootable x86 vault operating system with local setup and a staged remote-admin transport.
 
-**Bare-metal password vault operating system**
+## Current Model
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-x86_32--bit-brightgreen)]()
-[![Boot](https://img.shields.io/badge/boot-BIOS-legacy-yellow)]()
-[![Crypto](https://img.shields.io/badge/crypto-AES--256--GCM--SIV%20|%20ChaCha20--Poly1305%20|%20ML--KEM--768-blueviolet)]()
+- One initial `SUPERADMIN` account is created during first boot.
+- `TIER2` users can manage shared vault collaboration.
+- `TIER1` users manage only their own vault and any shared vaults granted to them.
 
-A dedicated secret-storage appliance that boots from a raw disk image and exposes a single SSH service. All cryptography is hand-rolled, no external libraries, no operating system underneath — just bare-metal security.
+## Build Profiles
 
----
-
-</div>
-
-## ✨ Features
-
-| Area | Details |
-|------|---------|
-| **🔐 At-rest encryption** | AES-256-GCM-SIV with key commitment (nonce-misuse resistant) |
-| **🔑 Password hashing** | Argon2id (256 MB, t=3) — ~1-3s per hash on modern hardware |
-| **🌐 Remote access** | Dropbear SSH with hybrid X25519 + ML-KEM-768 key exchange |
-| **✅ Verified boot** | SHA-256 + Ed25519 offline signing chain |
-| **📏 TPM 2.0** | Measured boot (PCR1: stage2, PCR8: kernel) + RNG seeding |
-| **👥 Multi-user** | SUPERADMIN, TIER2 (vault manager), TIER1 (basic user) |
-| **📂 Shared vaults** | Granular read/write/owner access control |
-| **🔐 Two-factor** | TOTP authenticator + hardware token support per user |
-| **📋 Audit log** | HMAC-SHA256 chained, tamper-evident |
-| **🔄 Secure update** | TFTP download with Ed25519 verification + rollback |
-| **🛡️ Firewall** | Per-IP blocking, rate limiting, event logging |
-
-## 🚀 Quick Start
+Three build profiles isolate object files in separate directories:
 
 ```bash
-qemu-system-i386 -drive file=build/briggs.img,format=raw \
-    -m 512M -no-reboot -serial stdio -cpu qemu64,rdrand=on \
-    -net nic,model=e1000 -net user,hostfwd=tcp::2222-:22
+make dev          # Development build: REMOTE_DISABLED, skips Argon2/Ed25519
+make prod-local   # Local-only production: REMOTE_DISABLED, full crypto
+make prod-remote  # Full production with Dropbear networking
+make ci           # Build all three profiles in sequence (requires distclean)
 ```
 
+Required tools:
+
+```bash
+i686-elf-gcc      (or host gcc -m32 for dev-only builds)
+i686-elf-as
+i686-elf-ld
+nasm
+python3            (with cryptography package for Ed25519 signing)
 ```
-ssh -p 2222 admin@localhost
+
+Build artifacts:
+
+- `build/briggs.img` — bootable HDD image
+- `build/briggs.iso` — bootable ISO image (El Torito)
+- `briggs_kernel.bin` — raw kernel binary
+
+## First Boot
+
+Boot the HDD or ISO image and complete the local setup flow:
+
+- create the initial `admin` superadmin account
+- choose DHCP or manual networking
+- set the recovery passphrase
+
+After setup, connect via the remote admin transport (prod-remote) or use the local VGA+serial console (dev/prod-local).
+
+## Build + Run
+
+```bash
+make dev              # Build dev profile
+make hdd              # Package HDD image
+make run              # Build + run under QEMU
+make run-iso          # Build + run ISO under QEMU
+make smoke-test       # Automated QEMU smoke test
 ```
 
-## 📖 Documentation
+## Security
 
-| Document | Description |
-|----------|-------------|
-| [`PRODUCTION_USER_GUIDE.md`](docs/PRODUCTION_USER_GUIDE.md) | Full deployment, operations, and command reference |
-| [`PRODUCTION_SECURITY_AUDIT.md`](docs/PRODUCTION_SECURITY_AUDIT.md) | NSA-style security audit (19 findings) |
-| [`TPM_INTEGRATION.md`](docs/TPM_INTEGRATION.md) | TPM 2.0 setup and measured boot |
-| [`SECURE_UPDATE.md`](docs/SECURE_UPDATE.md) | Secure update system design |
-| [`DROPBEAR_PORT.md`](docs/DROPBEAR_PORT.md) | Dropbear SSH backend notes |
+- **Ed25519 kernel verification**: kernel is cryptographically signed at build time; stage2 passes the signature and public key to the kernel, which verifies before executing.
+- **Verified-boot trust**: SHA-256 of the Ed25519 public key is stored in ApplianceMeta on first boot; subsequent boots verify the running key matches the stored hash.
+- **TPM measured boot**: kernel hash is extended into PCR 8.
+- **All vault data encrypted**: AES-256-GCM-SIV with key commitment.
+- **Argon2id KDF** (t=3, m=256MB): protects user passwords and vault keys.
+- **TOTP / hardware token**: optional two-factor authentication per account.
+- **Audit log**: HMAC-SHA256 chained, 256-entry ring.
 
-## 🔒 Security Posture
+## QEMU
 
-- **Crypto**: AES-256, ChaCha20-Poly1305, Ed25519, X25519, ML-KEM-768, Argon2id
-- **Entropy**: Fail-closed (RDRAND required at boot)
-- **Side-channels**: Constant-time tag comparisons (`ct_memcmp`); ChaCha20 is fully constant-time
-- **Memory**: All secrets zeroed via `kmemzero_secure()` with compiler barrier
-- **Self-tests**: All crypto primitives verified via KAT on every boot
-- **Supply chain**: Ed25519 offline signing; build artifacts checksummed
+Windows:
 
-> See [full security audit](docs/PRODUCTION_SECURITY_AUDIT.md) for detailed findings and remediation.
+```powershell
+.\run_qemu.ps1 hdd
+.\run_qemu.ps1 ssh
+```
 
-## 📦 Release Artifacts
+WSL/Linux:
 
-| File | Size | Description |
-|------|------|-------------|
-| `build/briggs.img` | 2 MB | Bootable raw HDD image |
-| `build/briggs_kernel.bin` | ~404 KB | Kernel binary (Ed25519 signed) |
-| `build/briggs_kernel.sig` | 64 B | Ed25519 signature |
-| `build/CHECKSUMS.txt` | — | SHA-256 + MD5 of build artifacts |
-| `RELEASE_CHECKSUMS.txt` | — | SHA-256 of entire release |
+```bash
+qemu-system-i386 \
+  -drive file=build/briggs.img,format=raw \
+  -m 512M \
+  -no-reboot \
+  -serial stdio \
+  -net nic,model=e1000 \
+  -net user
+```
 
-## 📋 Build Profile (v3.7 prod-remote)
+## Notes
 
-| Parameter | Value |
-|-----------|-------|
-| Kernel SHA-256 | `2d5bbcfb5098c11697f62c3a6fda143d7071dbfe2544ab98bda3fa3d4ab024a0` |
-| SSH backend | Dropbear (port 22) |
-| Argon2id | 256 MB, t=3, p=1 |
-| Entropy policy | 2 (fail-closed) |
-| Key exchange | X25519 + ML-KEM-768 hybrid |
-| Architecture | x86 32-bit, BIOS legacy boot |
-| Tests | 60/60 beta, 5/5 repro cycles |
-
----
-
-<div align="center">
-
-*Built with 🔧 from scratch — no stdlib, no OS, no dependencies*
-
-</div>
+- The primary supported path in this repo is the 32-bit BIOS flow in `boot/` and `kernel/`.
+- The 64-bit and UEFI code remains experimental.
+- The legacy in-kernel SSH backend is still present for development-only testing.
+- See `docs/PRODUCTION_USER_GUIDE.md` for the full deployment and operations manual.
+- See `docs/PRODUCTION_SECURITY_AUDIT.md` for the security audit report.
+- This is security-sensitive software and should be independently reviewed before production use.
