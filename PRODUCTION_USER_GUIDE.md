@@ -95,7 +95,7 @@ On first boot, the system presents a VGA-based setup wizard. A PS/2 keyboard is 
 
 ### Setup Steps
 
-1. **Admin password**: Enter the SUPERADMIN password. Minimum strength 5/7 (must include uppercase, lowercase, digit, special character, ≥8 chars).
+1. **Admin password**: Enter the SUPERADMIN password. Minimum strength 5/7 (must include uppercase, lowercase, digit, special character, ≥12 chars).
 
 2. **Network configuration**:
    - `dhcp` or blank → DHCP (recommended for QEMU user-mode)

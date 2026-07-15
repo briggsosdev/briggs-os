@@ -60,7 +60,7 @@ make smoke-test       # Automated QEMU smoke test
 - **Ed25519 kernel verification**: kernel is cryptographically signed at build time; stage2 passes the signature and public key to the kernel, which verifies before executing.
 - **Verified-boot trust**: SHA-256 of the Ed25519 public key is stored in ApplianceMeta on first boot; subsequent boots verify the running key matches the stored hash.
 - **TPM measured boot**: kernel hash is extended into PCR 8.
-- **All vault data encrypted**: AES-256-GCM-SIV with key commitment.
+- **All vault data encrypted**: ChaCha20-Poly1305 with key commitment.
 - **Argon2id KDF** (t=3, m=256MB): protects user passwords and vault keys.
 - **TOTP / hardware token**: optional two-factor authentication per account.
 - **Audit log**: HMAC-SHA256 chained, 256-entry ring.
