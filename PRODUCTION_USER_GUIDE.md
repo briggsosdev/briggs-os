@@ -220,6 +220,7 @@ SUPERADMIN-only vault commands:
 | `lock <n>` | Lock user account |
 | `unlock <n>` | Unlock user account |
 | `resetpw <n>` | Reset user password (DESTROYS their vault records) |
+| `tpm` | Fetch TPM2_Quote for remote attestation (PCR 8) |
 | `update <sub>` | System update management |
 | `wipe` | Wipe all data and reboot |
 | `back` | Return to vault shell |
@@ -495,7 +496,7 @@ Vault shell:     list | add | show <#> | edit <#> | del <#>
 Shared vaults:   svlist | svopen <id> | svadd | svclose
                  svcreate <name> (TIER2+)
 Admin panel:     admin (SUPERADMIN only)
-                 add1/add2 <user> | list | lock/unlock <n> | del <n>
+                 add1/add2 <user> | list | lock/unlock <n> | del <n> | tpm
 Recovery:        Hold 'R' at boot → recovery passphrase
                  unlock | resetpw | reboot
 Firewall:        netmon → block | unblock | log | rules

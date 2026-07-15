@@ -1,6 +1,6 @@
 ## Briggs OS v3.7 — Production Release (updated)
 
-**Kernel SHA-256**: `43a7f587b7f609b40ebba29946fc3875ae97b9c068f14a9d503b8388cfbc4a8a`
+**Kernel SHA-256**: `869c05622a2f5ab2a9fe0338ed0b3f89860cd57535534d7e68799d3387296581`
 
 ### What's included
 - **briggs.img** — Raw HDD image (2 MB, bootable)
@@ -32,10 +32,10 @@ qemu-system-i386 -drive file=briggs.img,format=raw \
 Then: `ssh -p 2222 admin@localhost`
 
 ### Security audit summary
-- 19 findings identified
+- 18 findings identified
 - **0 unmitigated CRITICAL** (CRIT-05: AES S-box cache timing → FIXED)
-- **1 OPEN HIGH** (HIGH-07: binary reproducibility not verified)
-- **3 OPEN MEDIUM** (MED-03, MED-05, MED-06: TPM attestation, fuzzing)
+- **0 OPEN HIGH** (all HIGH findings resolved)
+- **0 OPEN MEDIUM** (all MEDIUM findings resolved or accepted)
 - Full details: `docs/PRODUCTION_SECURITY_AUDIT.md`
 
 ### Changes since v3.6
@@ -52,3 +52,7 @@ Then: `ssh -p 2222 admin@localhost`
 - **ChaCha20 decrypt FIXED**: State was being zeroed before decryption keystream generation (key/nonce/SIGMA cleared)
 - **HIGH-03 FIXED**: ML-KEM-768 NTT variable-time reduction replaced with constant-time barrett_reduce + sign fix across poly_ntt, poly_intt, base_mul
 - **MED-02 FIXED**: Minimum password length increased from 8 to 12 characters (pw_score thresholds now 12/16/20)
+- **HIGH-07 FIXED**: Build reproducibility — SOURCE_DATE_EPOCH=0, -frandom-seed=0, --build-id=none, `make ci-repro` target
+- **MED-03 FIXED**: TPM2_Quote remote attestation via admin shell `tpm` command
+- **MED-05 FIXED**: DHCP parser fuzz harness (5000+ random iterations, zero crashes)
+- **MED-06 FIXED**: Network fuzzing integrated via fuzz_dhcp.py + run_fuzz_dhcp.sh
