@@ -4,12 +4,11 @@
 
 ### What's included
 - **briggs.img** — Raw HDD image (2 MB, bootable)
-- **briggs_kernel.bin** — Kernel binary (~404 KB), Ed25519 signed
-- **briggs_kernel.sig** — Ed25519 signature
-- **boot.bin / stage2.bin** — Boot chain (verified)
-- **CHECKSUMS.txt** — Build artifact checksums
+- **briggs_kernel.bin** — Kernel binary (~397 KB), Ed25519 signed
+- **briggs_kernel.sig** — Ed25519 signature (64 bytes)
+- **RELEASE_CHECKSUMS.txt** — SHA-256 checksums of all release files
 - **docs/PRODUCTION_USER_GUIDE.md** — Full deployment & operations manual
-- **docs/PRODUCTION_SECURITY_AUDIT.md** — NSA-style security audit (19 findings, 0 unmitigated CRITICAL)
+- **docs/PRODUCTION_SECURITY_AUDIT.md** — Security audit report (18 findings, 0 unresolved)
 - **docs/TPM_INTEGRATION.md** — TPM 2.0 setup guide
 - **docs/SECURE_UPDATE.md** — Secure update system
 - **docs/DROPBEAR_PORT.md** — SSH port notes
