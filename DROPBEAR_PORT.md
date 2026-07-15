@@ -10,7 +10,7 @@ Briggs is a bare-metal kernel, not a POSIX userland:
 - vault/admin UX is coupled to the current in-kernel SSH session API
 
 That means Dropbear cannot be treated as a simple source swap for
-`kernel_ssh.c`.
+`kernel_remote.c`.
 
 ## New seam
 
@@ -71,7 +71,7 @@ The Dropbear port is finished. The vault shell I/O was already transport-neutral
 
 Completed work:
 1. ✅ Dropbear core linked (`BRIGGS_DROPBEAR_CORE_LINKED=1`)
-2. ✅ Platform shim (`briggs_platform.h`, `kernel_dropbear.c`)
+2. ✅ Platform shim (`kernel_dropbear.c`)
 3. ✅ Host key generation at runtime (Ed25519, `svr_ensure_hostkey()`)
 4. ✅ Auth integration (`svr_briggs_user_index()` → `auth_find_user()`)
 5. ✅ State machine for shell handoff (HANDSHAKE → AUTH → AUTH_DONE → ACTIVE)
@@ -80,5 +80,5 @@ Completed work:
 ## Remaining work (optional)
 
 1. Test in QEMU with `make run-ssh` and verify SSH handoff works
-2. Remove `kernel_ssh.c` entirely once Dropbear is validated
+2. The old in-kernel SSH backend (`kernel_remote.c`) is superseded by Dropbear for production builds
 3. Audit `svr_briggs_*` functions for edge cases

@@ -11,7 +11,7 @@ Briggs OS includes TPM 2.0 support for:
 ## Files
 - `kernel/kernel_tpm.c` - TPM 2.0 driver (TPM2 commands)
 - `boot/tpm_stage2.s` - TPM measurement in stage2 (extends PCRs before kernel load)
-- `tools/tpm_tools.py` - Userspace tools for TPM operations
+- `kernel/kernel_main.c` - Admin shell `tpm` command for on-demand TPM2_Quote generation (MED-03)
 
 ## TPM Resources Used
 - PCR 0-7: BIOS/Stage2 measurements
@@ -35,8 +35,10 @@ Briggs OS includes TPM 2.0 support for:
 ./build.py --disable-tpm
 ```
 
+## Implemented
+- [x] TPM2_Extend in stage2 (PCR1)
+- [x] TPM2_GetRandom for kernel RNG seeding
+- [x] TPM2_Quote for remote attestation (admin shell `tpm` command, PCR 8, MED-03)
+
 ## TODO
-- [ ] Complete TPM2_Extend implementation in stage2
-- [ ] Add TPM2_GetRandom for kernel RNG seeding
-- [ ] Implement remote attestation protocol
 - [ ] Store Ed25519 public key in TPM NV storage
