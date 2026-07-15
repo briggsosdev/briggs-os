@@ -1,30 +1,28 @@
-# BRIGGS OS v3.7 — Production Release
+# BRIGGS OS v3.7
 
-Briggs OS is a BIOS-bootable bare-metal x86 password vault operating system. It operates as a dedicated hardware secret vault accessed exclusively via SSH (Dropbear). This repository contains the production release artifacts only — no source code.
+A bootable x86 operating system that turns old hardware into a dedicated hardware password vault. Access it over SSH. No Linux underneath, no bloated web interface, just a stripped-down kernel that runs one thing and runs it well.
 
-## User Model
+## What it does
 
-- **SUPERADMIN** (`admin`): full system administration, user management, admin panel
-- **TIER2**: shared vault management
-- **TIER1**: personal vault + granted shared vaults
+- Runs on bare metal or in QEMU
+- Exposes SSH on port 22 via Dropbear
+- Create users, store passwords, share vaults
+- Full admin panel for user management
+- TPM 2.0 measured boot if you've got the chip
+- Ed25519-signed kernel with verified boot chain
 
-## Contents
+## The crypto stack (hand-rolled, no libc)
 
-| File | Description |
+| Feature | What |
 |---|---|
-| `briggs.img` | Bootable HDD image (2 MB, BIOS/MBR) |
-| `briggs_kernel.bin` | Raw kernel binary (~397 KB) |
-| `briggs_kernel.sig` | Ed25519 signature (64 bytes) |
-| `docs/PRODUCTION_USER_GUIDE.md` | Full deployment and operations manual |
-| `docs/PRODUCTION_SECURITY_AUDIT.md` | Security audit report |
-| `docs/TPM_INTEGRATION.md` | TPM 2.0 setup guide |
-| `docs/SECURE_UPDATE.md` | Secure update system documentation |
-| `docs/DROPBEAR_PORT.md` | Dropbear SSH integration notes |
-| `RELEASE_NOTES.md` | Changelog and release notes |
-| `SECURITY.md` | Security policy |
-| `RELEASE_CHECKSUMS.txt` | SHA-256 checksums of release files |
+| Password hashing | Argon2id, 256 MB, 3 passes |
+| Vault encryption | ChaCha20-Poly1305 (constant-time) |
+| Key exchange | X25519 + ML-KEM-768 hybrid |
+| Signatures | Ed25519 (offline signing) |
+| Entropy | RDRAND or die (fail-closed) |
+| 2FA | TOTP and/or hardware token |
 
-## Quick Start (QEMU)
+## Quick start
 
 ```bash
 qemu-system-i386 -drive file=briggs.img,format=raw \
@@ -34,37 +32,34 @@ qemu-system-i386 -drive file=briggs.img,format=raw \
     -net user,hostfwd=tcp::2222-:22
 ```
 
-Connect: `ssh -p 2222 admin@localhost`
-
-## Security Highlights
-
-- **Argon2id** password hashing (t=3, m=256MB)
-- **Ed25519 offline-signed** kernel binary
-- **ChaCha20-Poly1305** vault encryption (constant-time)
-- **Hybrid key exchange**: X25519 + ML-KEM-768 (post-quantum)
-- **TPM 2.0** measured boot (PCR1 stage2, PCR8 kernel)
-- **TOTP / hardware token** two-factor authentication
-- **HMAC-chained audit log** (256-entry ring)
-- **Dropbear SSH** with session management and idle timeout
-
-## Deployment
-
-See `docs/PRODUCTION_USER_GUIDE.md` for:
-- First-boot setup wizard
-- Account creation and management
-- SSH configuration and firewall
-- Backup, recovery, and wipe procedures
-- Troubleshooting guide
-
-## Verification
-
 ```bash
-sha256sum --check RELEASE_CHECKSUMS.txt
+ssh -p 2222 admin@localhost
 ```
 
-Kernel SHA-256: `869c05622a2f5ab2a9fe0338ed0b3f89860cd57535534d7e68799d3387296581`
+First boot walks you through creating the admin account and setting up networking.
 
-## Security
+## What's in the box
 
-- See `docs/PRODUCTION_SECURITY_AUDIT.md` for the full audit report (18 findings, 0 unresolved)
-- This is security-sensitive software. Independently review before production use.
+```
+briggs.img               Bootable HDD image
+briggs_kernel.bin        The actual kernel (~397 KB)
+briggs_kernel.sig        Ed25519 signature
+docs/                    Full docs: deployment, security audit, TPM setup
+RELEASE_CHECKSUMS.txt    sha256 of everything
+```
+
+## Security audit
+
+All findings from the audit are addressed. The report is in `docs/PRODUCTION_SECURITY_AUDIT.md` — 18 items, all resolved or accepted.
+
+- CRIT-05: AES S-box timing -> switched to ChaCha20-Poly1305
+- HIGH-03: ML-KEM NTT variable-time -> constant-time Barrett reduction
+- HIGH-07: Build reproducibility -> SOURCE_DATE_EPOCH + -frandom-seed
+- MED-02: Minimum password length -> 12 chars
+- MED-03: TPM remote attestation -> tpm2_quote() in admin shell
+
+## Who is this for
+
+People who want a dedicated password vault they can actually trust. No Electron, no cloud dependency, no closed-source TPM black box. If you've got an old PC or a VM, this runs on it.
+
+This is security software. Review it before you trust it with real secrets.
