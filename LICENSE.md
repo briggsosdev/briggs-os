@@ -2,40 +2,20 @@
 
 Copyright (c) 2026 Briggs OS
 
-## 1. Personal Use (Free)
+## Personal use — free
 
-Individual persons may use Briggs OS for personal, non-commercial purposes free of charge. "Personal use" means use by a natural person for their own private benefit, not in connection with any business, commercial enterprise, or revenue-generating activity.
+If you're a person using this for yourself, it's free. Run it on your own hardware, store your own passwords, poke at it, whatever.
 
-Personal use includes:
-- Running Briggs OS on personal hardware
-- Evaluating, testing, and auditing the software
-- Storing your own personal secrets
+## Business use — need a license
 
-## 2. Commercial Use (Requires License)
+If a company, organization, or anyone acting on behalf of one uses this, you need a paid license. That includes deploying it on company hardware, having employees use it, or offering it as part of a service.
 
-Any use of Briggs OS by or for a business entity, organization, government agency, or any revenue-generating activity requires a paid commercial license.
+Open an issue at https://github.com/briggsosdev/briggs-os to get one.
 
-Commercial use includes:
-- Deployment on company-owned infrastructure
-- Use by employees, contractors, or agents of any organization
-- Providing Briggs OS-based services to third parties
-- Any use in a business, nonprofit, educational institution, or government setting
+## Redistribution
 
-Contact **briggsosdev** on GitHub to obtain a commercial license.
+You can redistribute the binaries as long as you don't charge for it, don't modify it, and include this license.
 
-## 3. Redistribution
+## Disclaimer
 
-Redistribution of Briggs OS binaries or documentation is permitted only when:
-- The distribution is free of charge and unmodified
-- This license file is included
-- The recipient is informed of these terms
-
-Redistribution as part of a commercial product or service requires a commercial license.
-
-## 4. Disclaimer
-
-THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND. The authors are not liable for any damages arising from its use.
-
-## 5. Contact
-
-For commercial licenses: open an issue at https://github.com/briggsosdev/briggs-os
+This software comes with no warranty. Use at your own risk.

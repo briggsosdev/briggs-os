@@ -1,12 +1,6 @@
 # Security Audit: Briggs OS Production Build
 
-**Classification**: CONFIDENTIAL — For Authorized Deployments Only  
-**Document ID**: BRIGGS-SEC-AUDIT-001  
-**Date**: 2026-07-15  
-**Build**: prod-remote (BRIGGS_BUILD_PROD=1, entropy policy 2, Argon2id full)  
-**Kernel SHA-256**: 2d5bbcfb5098c11697f62c3a6fda143d7071dbfe2544ab98bda3fa3d4ab024a0  
-**Auditor**: Automated toolchain + manual code review  
-**Scope**: Full cryptographic stack, authentication, session management, boot security, network attack surface, physical security, side-channel resistance
+**Kernel SHA-256**: 2d5bbcfb5098c11697f62c3a6fda143d7071dbfe2544ab98bda3fa3d4ab024a0
 
 ---
 

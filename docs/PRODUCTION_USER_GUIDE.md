@@ -1,15 +1,8 @@
 # Briggs OS — Production User Guide
 
-**Version**: prod-remote  
-**Build Date**: 2026-07-15  
-**Kernel SHA-256**: 2d5bbcfb5098c11697f62c3a6fda143d7071dbfe2544ab98bda3fa3d4ab024a0  
-**Document**: BRIGGS-UG-001
+Boots from a raw disk image, runs in RAM, exposes SSH on port 22. Everything crypto-related is hand-written.
 
----
-
-## 1. Overview
-
-Briggs OS is a bare-metal x86 operating system that operates as a **dedicated hardware password/secret vault**. It boots from a raw HDD image, runs entirely from RAM, and exposes a single SSH service on port 22 (configurable). All cryptographic operations — hashing, encryption, signing, key exchange — are performed by hand-rolled implementations with no external libraries.
+## Overview
 
 ### Key Features
 
