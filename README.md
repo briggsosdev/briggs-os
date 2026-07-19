@@ -50,6 +50,7 @@ First boot walks you through creating the admin account and setting up networkin
 briggs.img               Bootable HDD image (2 MB)
 briggs_kernel.bin        The actual kernel (~397 KB)
 briggs_kernel.sig        Ed25519 signature
+virus_scan_report.pdf    Third-party virus scan results
 LICENSE.md               License terms
 docs/                    Full docs: deployment, security audit, TPM setup
 RELEASE_CHECKSUMS.txt    sha256 of everything

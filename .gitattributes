@@ -1,0 +1,10 @@
+*.md linguist-documentation
+*.bin linguist-vendored
+*.sig linguist-vendored
+*.img linguist-vendored
+*.png linguist-vendored
+*.txt linguist-vendored
+
+# Override language detection to Assembly (kernel is C + assembly)
+# This file itself tells Linguist the repo language
+.gitattributes linguist-language=Assembly linguist-vendored=false
