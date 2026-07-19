@@ -1,4 +1,4 @@
-# BRIGGS OS v3.7
+# BRIGGS OS
 
 [![License: Personal Use Free](https://img.shields.io/badge/license-Personal%20Use%20Free-brightgreen?style=flat-square)](LICENSE.md)
 [![Platform](https://img.shields.io/badge/platform-i386-blue?style=flat-square)]()

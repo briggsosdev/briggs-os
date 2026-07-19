@@ -1,6 +1,6 @@
 # Briggs OS — Production User Guide
 
-**Version**: 3.7 (prod-remote)  
+**Version**: prod-remote  
 **Build Date**: 2026-07-15  
 **Kernel SHA-256**: 2d5bbcfb5098c11697f62c3a6fda143d7071dbfe2544ab98bda3fa3d4ab024a0  
 **Document**: BRIGGS-UG-001
