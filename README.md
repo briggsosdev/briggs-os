@@ -23,6 +23,12 @@ ssh -p 2222 admin@localhost
 
 First boot walks you through setup.
 
+<img width="717" height="457" alt="Screenshot 2026-07-19 191020" src="https://github.com/user-attachments/assets/a4c2bb90-4b1a-4828-a223-64b4c4cdfecd" />
+<img width="720" height="462" alt="Screenshot 2026-07-19 190637" src="https://github.com/user-attachments/assets/5ae57cef-243d-4b13-9746-fbf5dfbf0db4" />
+<img width="720" height="400" alt="VirtualBox_BRIGGS_OS_15_07_2026_18_54_46" src="https://github.com/user-attachments/assets/c1839a6e-8826-4cfd-bf13-a816fc485767" />
+
+
+
 ## Crypto (all hand written, no libc)
 
 - Argon2id at 256 MB, 3 passes for passwords
