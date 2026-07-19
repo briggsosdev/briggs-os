@@ -1,5 +1,11 @@
 # BRIGGS OS v3.7
 
+[![License: Personal Use Free](https://img.shields.io/badge/license-Personal%20Use%20Free-brightgreen?style=flat-square)](LICENSE.md)
+[![Platform](https://img.shields.io/badge/platform-i386-blue?style=flat-square)]()
+[![Release](https://img.shields.io/github/v/release/briggsosdev/briggs-os?style=flat-square)](https://github.com/briggsosdev/briggs-os/releases)
+[![Audit](https://img.shields.io/badge/audit-0%20unresolved%20findings-success?style=flat-square)](docs/PRODUCTION_SECURITY_AUDIT.md)
+[![Code](https://img.shields.io/badge/code%20size-~397%20KB-ff69b4?style=flat-square)](briggs_kernel.bin)
+
 A bootable x86 operating system that turns old hardware into a dedicated hardware password vault. Access it over SSH. No Linux underneath, no bloated web interface, just a stripped-down kernel that runs one thing and runs it well.
 
 ## What it does
@@ -41,12 +47,17 @@ First boot walks you through creating the admin account and setting up networkin
 ## What's in the box
 
 ```
-briggs.img               Bootable HDD image
+briggs.img               Bootable HDD image (2 MB)
 briggs_kernel.bin        The actual kernel (~397 KB)
 briggs_kernel.sig        Ed25519 signature
+LICENSE.md               License terms
 docs/                    Full docs: deployment, security audit, TPM setup
 RELEASE_CHECKSUMS.txt    sha256 of everything
 ```
+
+## Licensing
+
+Free for personal use. Businesses and organizations need a commercial license. See [LICENSE.md](LICENSE.md).
 
 ## Security audit
 
@@ -62,4 +73,4 @@ All findings from the audit are addressed. The report is in `docs/PRODUCTION_SEC
 
 People who want a dedicated password vault they can actually trust. No Electron, no cloud dependency, no closed-source TPM black box. If you've got an old PC or a VM, this runs on it.
 
-This is security software. Review it before you trust it with real secrets.
+This is security software. Review it before you trust it with real secrets. Commercial use requires a license. Personal use is free.

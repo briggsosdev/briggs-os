@@ -2,6 +2,8 @@
 
 Kernel SHA-256: `869c05622a2f5ab2a9fe0338ed0b3f89860cd57535534d7e68799d3387296581`
 
+**License**: Free for personal use. Commercial use requires a license. See `LICENSE.md`.
+
 ### What you get
 
 | File | What |
